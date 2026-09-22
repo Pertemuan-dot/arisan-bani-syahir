@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arisan Bani Syahir</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Sidebar / Navigasi -->
+  <nav class="sidebar">
+    <div class="logo">
+      <h2>Bani Syahir</h2>
+      <p>Aplikasi Arisan</p>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#" onclick="showPage('dashboard')" class="active" id="nav-dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="#" onclick="showPage('keluarga')" id="nav-keluarga"><i class="fas fa-users"></i> Data Keluarga</a></li>
+      <li><a href="#" onclick="showPage('peserta')" id="nav-peserta"><i class="fas fa-list-check"></i> Peserta Arisan</a></li>
+      <li><a href="#" onclick="showPage('undian')" id="nav-undian"><i class="fas fa-cube"></i> Undian Arisan</a></li>
+      <li><a href="#" onclick="showPage('pemenang')" id="nav-pemenang"><i class="fas fa-trophy"></i> Pemenang</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">Notifikasi</div>
+
+    <!-- Loading Overlay -->
+    <div id="loader" class="loader-overlay hidden">
+      <div class="spinner"></div>
+      <p>Memproses data...</p>
+    </div>
+
+    <!-- PAGE: DASHBOARD -->
+    <section id="page-dashboard" class="page active">
+      <header>
+        <h1>Arisan Bani Syahir</h1>
+        <p>Keluarga Besar Bani Syahir</p>
+      </header>
+      <div class="cards">
+        <div class="card"><h3 id="dash-keluarga">0</h3><p>Total Keluarga</p></div>
+        <div class="card"><h3 id="dash-peserta">0</h3><p>Peserta Aktif</p></div>
+        <div class="card success"><h3 id="dash-bayar">0</h3><p>Sudah Bayar</p></div>
+        <div class="card danger"><h3 id="dash-belum">0</h3><p>Belum Bayar</p></div>
+        <div class="card"><h3 id="dash-pemenang">0</h3><p>Total Pemenang</p></div>
+      </div>
+    </section>
+
+    <!-- PAGE: KELUARGA -->
+    <section id="page-keluarga" class="page hidden">
+      <div class="page-header">
+        <h2>Data Keluarga</h2>
+        <button onclick="openModalKeluarga()" class="btn btn-primary"><i class="fas fa-plus"></i> Tambah</button>
+      </div>
+      <div class="table-container">
+        <table id="tbl-keluarga">
+          <thead>
+            <tr>
+              <th>No. Arisan</th>
+              <th>Nama Lengkap</th>
+              <th>Status</th>
+              <th>No. HP</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- PAGE: PESERTA -->
+    <section id="page-peserta" class="page hidden">
+      <div class="page-header">
+        <h2>Peserta Arisan</h2>
+        <button onclick="openModalPeserta()" class="btn btn-primary"><i class="fas fa-plus"></i> Tambah</button>
+      </div>
+      <div class="filters">
+        <select id="filter-tahun" onchange="loadPeserta()"><option value="2026">2026</option><option value="2027">2027</option></select>
+        <select id="filter-acara" onchange="loadPeserta()"><option value="Idul Fitri">Idul Fitri</option><option value="Maulid Nabi Muhammad SAW">Maulid</option></select>
+      </div>
+      <div class="table-container">
+        <table id="tbl-peserta">
+          <thead>
+            <tr>
+              <th>No. Arisan</th>
+              <th>Nama</th>
+              <th>Acara</th>
+              <th>Status</th>
+              <th>Pembayaran</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- PAGE: UNDIAN -->
+    <section id="page-undian" class="page hidden text-center">
+      <h2>🎱 Mesin Undian Arisan</h2>
+      <p>Hanya peserta aktif yang sudah membayar yang masuk undian.</p>
+      
+      <div class="undian-container">
+        <div class="lottery-machine" id="lottery-display">--</div>
+        <button id="btn-undi" class="btn btn-large btn-primary" onclick="mulaiUndian()">MULAI UNDIAN</button>
+      </div>
+
+      <div id="hasil-undian" class="hidden result-box">
+        <h3>Pemenang Ditemukan!</h3>
+        <h1 id="win-nomor" class="win-number"></h1>
+        <h2 id="win-nama"></h2>
+        <p id="win-detail"></p>
+        <button class="btn btn-success" onclick="konfirmasiSimpanPemenang()">Simpan Pemenang</button>
+        <button class="btn btn-danger" onclick="document.getElementById('hasil-undian').classList.add('hidden')">Batal / Undi Ulang</button>
+      </div>
+    </section>
+
+    <!-- PAGE: PEMENANG -->
+    <section id="page-pemenang" class="page hidden">
+      <div class="page-header">
+        <h2>🏆 Daftar Pemenang</h2>
+      </div>
+      <div class="winner-grid" id="winner-container">
+        <!-- Cards Pemenang akan di-render di sini -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal Keluarga -->
+  <div id="modal-keluarga" class="modal hidden">
+    <div class="modal-content">
+      <h3 id="modal-keluarga-title">Tambah Keluarga</h3>
+      <form id="form-keluarga" onsubmit="submitKeluarga(event)">
+        <input type="hidden" id="kel-id">
+        <div class="form-group"><label>No Arisan</label><input type="text" id="kel-no" required></div>
+        <div class="form-group"><label>Nama Lengkap</label><input type="text" id="kel-nama" required></div>
+        <div class="form-group"><label>No HP</label><input type="text" id="kel-hp"></div>
+        <div class="form-group"><label>Foto (Pilih file)</label><input type="file" id="kel-foto" accept="image/*"></div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="kel-status">
+            <option>Menikah</option><option>Menantu</option><option>Anak</option><option>Almarhum</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn" onclick="closeModal('modal-keluarga')">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Peserta -->
+  <div id="modal-peserta" class="modal hidden">
+    <div class="modal-content">
+      <h3 id="modal-peserta-title">Tambah Peserta</h3>
+      <form id="form-peserta" onsubmit="submitPeserta(event)">
+        <input type="hidden" id="pes-id">
+        <div class="form-group">
+          <label>Keluarga</label>
+          <select id="pes-keluarga" required onchange="autoFillPeserta()"></select>
+        </div>
+        <div class="form-group"><label>No Arisan</label><input type="text" id="pes-no" readonly></div>
+        <div class="form-group">
+          <label>Acara</label>
+          <select id="pes-acara">
+            <option>Idul Fitri</option>
+            <option>Maulid Nabi Muhammad SAW</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Tahun</label><input type="number" id="pes-tahun" value="2026" required></div>
+        <div class="modal-actions">
+          <button type="button" class="btn" onclick="closeModal('modal-peserta')">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
