@@ -1,422 +1,103 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#2563eb">
-  <title>Arisan Bani Syahir</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
-      --success: #16a34a;
-      --danger: #dc2626;
-      --warning: #d97706;
-      --dark: #1f2937;
-      --muted: #6b7280;
-      --light: #f3f4f6;
-      --white: #ffffff;
-      --border: #e5e7eb;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { min-height: 100%; }
-    body {
-      display: flex;
-      background: var(--light);
-      color: var(--dark);
-      min-height: 100vh;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    button, input, select { font: inherit; }
-
-    /* Sidebar */
-    .sidebar {
-      width: 250px;
-      background: var(--white);
-      padding: 20px;
-      box-shadow: 2px 0 5px rgba(0,0,0,.05);
-      flex-shrink: 0;
-    }
-    .sidebar .logo h2 { color: var(--primary); font-size: 1.5rem; }
-    .sidebar .logo p { font-size: .8rem; color: var(--muted); margin-bottom: 30px; }
-    .nav-links { list-style: none; }
-    .nav-links li { margin-bottom: 10px; }
-    .nav-links a {
-      display: block;
-      padding: 12px;
-      text-decoration: none;
-      color: var(--dark);
-      border-radius: 8px;
-      transition: .2s;
-    }
-    .nav-links a:hover, .nav-links a.active { background: var(--primary); color: var(--white); }
-    .nav-links i { margin-right: 10px; width: 20px; text-align: center; }
-
-    /* Main */
-    .main-content {
-      flex: 1;
-      padding: 30px;
-      overflow-y: auto;
-      min-width: 0;
-    }
-    .page { display: none; }
-    .page.active { display: block; }
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-    .page-header h2 { margin: 0; }
-
-    /* Dashboard */
-    .hero {
-      background: linear-gradient(135deg, #eff6ff, #ffffff);
-      border: 1px solid #dbeafe;
-      padding: 24px;
-      border-radius: 18px;
-      margin-bottom: 20px;
-    }
-    .hero h1 { margin-bottom: 5px; }
-    .hero p { color: var(--muted); }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: var(--white);
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0,0,0,.05);
-      text-align: center;
-      border: 1px solid rgba(0,0,0,.02);
-    }
-    .card h3 { font-size: 2.5rem; color: var(--primary); margin-bottom: 5px; }
-    .card.success h3 { color: var(--success); }
-    .card.danger h3 { color: var(--danger); }
-    .card small { color: var(--muted); }
-
-    /* Filters/search */
-    .toolbar {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 15px;
-    }
-    .toolbar > * { min-width: 160px; }
-    .filters {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 15px;
-    }
-    .filters select, .filters input {
-      min-width: 180px;
-      padding: 10px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      background: var(--white);
-    }
-
-    /* Tables */
-    .table-container {
-      background: var(--white);
-      border-radius: 12px;
-      overflow-x: auto;
-      box-shadow: 0 4px 6px rgba(0,0,0,.05);
-    }
-    table { width: 100%; border-collapse: collapse; white-space: nowrap; }
-    th, td { padding: 13px 15px; text-align: left; border-bottom: 1px solid var(--border); }
-    th { background: #f9fafb; font-weight: 600; }
-    tbody tr:hover { background: #f9fafb; }
-    .thumb {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #e5e7eb;
-      vertical-align: middle;
-    }
-
-    .badge-success, .badge-warning, .badge-muted {
-      padding: 5px 10px;
-      border-radius: 20px;
-      font-size: .8rem;
-      display: inline-block;
-    }
-    .badge-success { background: #dcfce7; color: var(--success); }
-    .badge-warning { background: #fef3c7; color: var(--warning); }
-    .badge-muted { background: #f3f4f6; color: var(--muted); }
-
-    /* Buttons */
-    .btn {
-      padding: 10px 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: .2s;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    .btn:disabled { opacity: .6; cursor: not-allowed; }
-    .btn-primary { background: var(--primary); color: var(--white); }
-    .btn-primary:hover:not(:disabled) { background: var(--primary-hover); }
-    .btn-success { background: var(--success); color: var(--white); }
-    .btn-danger { background: var(--danger); color: var(--white); }
-    .btn-secondary { background: #e5e7eb; color: var(--dark); }
-    .btn-small { padding: 7px 10px; font-size: .85rem; }
-    .btn-large { padding: 15px 30px; font-size: 1.15rem; }
-
-    .action-group { display: flex; gap: 6px; flex-wrap: wrap; }
-
-    /* Modal */
-    .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      padding: 15px;
-    }
-    .modal-content {
-      background: var(--white);
-      padding: 25px;
-      border-radius: 15px;
-      width: 100%;
-      max-width: 560px;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-    .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; margin-bottom: 6px; font-weight: 600; }
-    .form-group input, .form-group select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      background: #fff;
-    }
-    .modal-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 20px;
-      flex-wrap: wrap;
-    }
-    .preview-photo {
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      object-fit: cover;
-      display: block;
-      margin: 0 auto 10px;
-      border: 3px solid #e5e7eb;
-    }
-
-    .hidden { display: none !important; }
-
-    /* Lottery */
-    .text-center { text-align: center; }
-    .undian-container {
-      margin: 30px auto 20px;
-      padding: 30px 20px;
-      background: var(--white);
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,.08);
-      max-width: 680px;
-      border: 1px solid #e5e7eb;
-    }
-    .lottery-ball {
-      width: 190px;
-      height: 190px;
-      margin: 0 auto 25px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 4rem;
-      font-weight: 800;
-      color: var(--primary);
-      background: radial-gradient(circle at 30% 25%, #ffffff 0, #eff6ff 35%, #bfdbfe 72%, #93c5fd 100%);
-      border: 8px solid #dbeafe;
-      box-shadow: inset -15px -15px 35px rgba(37,99,235,.15), 0 12px 30px rgba(0,0,0,.12);
-      user-select: none;
-    }
-    .spin-anim {
-      animation: ballPulse .1s infinite linear, ballRotate .45s infinite linear;
-    }
-    @keyframes ballPulse {
-      0% { transform: scale(.98); }
-      50% { transform: scale(1.04); }
-      100% { transform: scale(.98); }
-    }
-    @keyframes ballRotate {
-      from { filter: blur(0); }
-      50% { filter: blur(1.2px); }
-      to { filter: blur(0); }
-    }
-    .result-box {
-      margin: 20px auto;
-      max-width: 680px;
-      padding: 25px;
-      border: 2px dashed var(--success);
-      border-radius: 15px;
-      background: #f0fdf4;
-    }
-    .winner-photo {
-      width: 120px;
-      height: 120px;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 4px solid #bbf7d0;
-      margin: 10px auto 15px;
-    }
-    .win-number { font-size: 4rem; color: var(--success); margin: 5px 0; }
-
-    /* Recent winners */
-    .section-title {
-      max-width: 1000px;
-      margin: 28px auto 12px;
-      text-align: left;
-    }
-    .winner-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 20px;
-    }
-    .winner-card {
-      background: var(--white);
-      border-radius: 15px;
-      padding: 20px;
-      text-align: center;
-      border-top: 5px solid #fbbf24;
-      box-shadow: 0 4px 6px rgba(0,0,0,.05);
-    }
-    .winner-card h1 { font-size: 2.5rem; color: #d97706; margin: 8px 0; }
-    .winner-card p { margin: 4px 0; }
-    .winner-card small { color: var(--muted); }
-
-    /* Loader & toast */
-    .loader-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(255,255,255,.82);
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      backdrop-filter: blur(2px);
-    }
-    .spinner {
-      width: 52px;
-      height: 52px;
-      border: 5px solid #d1d5db;
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: sp 1s linear infinite;
-      margin-bottom: 15px;
-    }
-    @keyframes sp { to { transform: rotate(360deg); } }
-
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      max-width: min(420px, calc(100vw - 30px));
-      background: var(--dark);
-      color: var(--white);
-      padding: 14px 18px;
-      border-radius: 10px;
-      z-index: 10000;
-      box-shadow: 0 5px 15px rgba(0,0,0,.2);
-    }
-
-    .empty-state {
-      padding: 35px;
-      text-align: center;
-      color: var(--muted);
-    }
-
-    .api-warning {
-      background: #fff7ed;
-      border: 1px solid #fed7aa;
-      color: #9a3412;
-      padding: 14px 16px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      line-height: 1.5;
-    }
-
-    @media (max-width: 768px) {
-      body { flex-direction: column; }
-      .sidebar {
-        width: 100%;
-        display: flex;
-        overflow-x: auto;
-        padding: 8px;
-        position: sticky;
-        top: 0;
-        z-index: 900;
-      }
-      .sidebar .logo { display: none; }
-      .nav-links { display: flex; width: 100%; gap: 5px; }
-      .nav-links li { margin: 0; flex: 1; text-align: center; }
-      .nav-links a { padding: 10px 7px; font-size: .78rem; }
-      .nav-links i { margin: 0 0 5px; display: block; width: auto; }
-      .main-content { padding: 15px; }
-      .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-      .card { padding: 15px 10px; }
-      .card h3 { font-size: 2rem; }
-      .lottery-ball { width: 150px; height: 150px; font-size: 3.2rem; }
-      .modal-content { padding: 20px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<title>Arisan Bani Syahir</title>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+:root{--primary:#2563eb;--primary2:#1d4ed8;--success:#16a34a;--danger:#dc2626;--warning:#d97706;--dark:#1f2937;--muted:#6b7280;--light:#f3f4f6;--white:#fff;--border:#e5e7eb}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:Segoe UI,Tahoma,sans-serif}
+body{background:var(--light);color:var(--dark)}
+button,input,select{font:inherit}
+.hidden{display:none!important}
+.app{display:flex;min-height:100vh}
+.sidebar{width:250px;background:#fff;padding:20px;box-shadow:2px 0 8px rgba(0,0,0,.06);flex-shrink:0}
+.logo h2{color:var(--primary)}.logo p{font-size:.82rem;color:var(--muted);margin:4px 0 25px}
+.nav-links{list-style:none}.nav-links li{margin-bottom:8px}
+.nav-links a{display:flex;align-items:center;gap:10px;padding:12px;text-decoration:none;color:var(--dark);border-radius:9px}
+.nav-links a:hover,.nav-links a.active{background:var(--primary);color:#fff}
+.nav-links i{width:20px;text-align:center}
+.main{flex:1;min-width:0;padding:28px;overflow:auto}
+.hero{background:linear-gradient(135deg,#eff6ff,#fff);border:1px solid #dbeafe;padding:24px;border-radius:18px;margin-bottom:20px}
+.hero p{color:var(--muted);margin-top:4px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px}
+.card{background:#fff;border-radius:14px;padding:20px;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,.05)}
+.card h3{font-size:2.4rem;color:var(--primary);margin-bottom:5px}.card.success h3{color:var(--success)}.card.danger h3{color:var(--danger)}
+.page{display:none}.page.active{display:block}
+.page-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}
+.filters input,.filters select{min-width:170px;padding:10px 12px;border:1px solid #d1d5db;border-radius:8px;background:#fff}
+.table-box{background:#fff;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.05);overflow:auto}
+table{width:100%;border-collapse:collapse;white-space:nowrap}
+th,td{padding:13px 15px;border-bottom:1px solid var(--border);text-align:left}
+th{background:#f8fafc}
+.btn{border:0;border-radius:8px;padding:10px 15px;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover:not(:disabled){background:var(--primary2)}
+.btn-success{background:var(--success);color:#fff}.btn-danger{background:var(--danger);color:#fff}.btn-secondary{background:#e5e7eb;color:var(--dark)}
+.btn-sm{padding:7px 10px;font-size:.85rem}.btn-lg{padding:15px 28px;font-size:1.08rem}
+.actions{display:flex;gap:6px;flex-wrap:wrap}
+.badge{display:inline-block;padding:5px 9px;border-radius:999px;font-size:.78rem;font-weight:700}
+.badge-ok{background:#dcfce7;color:#166534}.badge-no{background:#fef3c7;color:#92400e}.badge-muted{background:#f3f4f6;color:#6b7280}
+.thumb{width:45px;height:45px;border-radius:50%;object-fit:cover;border:2px solid #e5e7eb}
+.empty{padding:35px;text-align:center;color:var(--muted)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:15px;z-index:3000}
+.modal-card{background:#fff;border-radius:15px;width:min(620px,100%);max-height:92vh;overflow:auto;padding:24px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-group{margin-bottom:14px}.form-group label{display:block;font-weight:700;margin-bottom:6px}
+.form-group input,.form-group select{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px}
+.modal-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.preview{width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid #e5e7eb;display:block;margin:0 auto 10px}
+.api-status{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-size:.8rem;margin-top:12px}
+.undian{text-align:center}.lottery-wrap{background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:30px;max-width:700px;margin:22px auto;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+.ball{width:190px;height:190px;margin:0 auto 25px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:4rem;font-weight:800;color:var(--primary);background:radial-gradient(circle at 30% 25%,#fff 0,#eff6ff 35%,#bfdbfe 72%,#93c5fd 100%);border:8px solid #dbeafe;box-shadow:inset -15px -15px 35px rgba(37,99,235,.15),0 12px 30px rgba(0,0,0,.12)}
+.spin{animation:pulse .1s infinite linear,blur .4s infinite linear}
+@keyframes pulse{50%{transform:scale(1.04)}}@keyframes blur{50%{filter:blur(1.2px)}}
+.result{max-width:700px;margin:18px auto;padding:25px;border:2px dashed var(--success);border-radius:15px;background:#f0fdf4;text-align:center}
+.win-foto{width:125px;height:125px;object-fit:cover;border-radius:50%;border:4px solid #bbf7d0;margin:10px auto}.win-no{font-size:4rem;color:var(--success);font-weight:800}
+.winners{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:18px}
+.w-card{background:#fff;border-radius:14px;padding:20px;text-align:center;border-top:5px solid #fbbf24;box-shadow:0 4px 12px rgba(0,0,0,.05)}
+.w-card h1{font-size:2.5rem;color:#b45309;margin:8px 0}.w-card small{color:var(--muted)}
+.loader{position:fixed;inset:0;background:rgba(255,255,255,.82);display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:5000;backdrop-filter:blur(2px)}
+.spinner{width:52px;height:52px;border:5px solid #d1d5db;border-top-color:var(--primary);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast{position:fixed;right:18px;bottom:18px;z-index:6000;background:var(--dark);color:#fff;padding:14px 18px;border-radius:10px;max-width:min(420px,calc(100vw - 36px));box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.warning{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;padding:14px;border-radius:10px;margin-bottom:18px}
+@media(max-width:768px){
+ .app{display:block}.sidebar{width:100%;padding:8px;position:sticky;top:0;z-index:1000;overflow:auto}.logo{display:none}
+ .nav-links{display:flex;gap:4px}.nav-links li{flex:1;margin:0}.nav-links a{justify-content:center;flex-direction:column;gap:3px;font-size:.72rem;padding:9px 5px;text-align:center}.nav-links i{width:auto}
+ .main{padding:15px}.cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card{padding:15px 10px}.card h3{font-size:2rem}
+ .form-row{grid-template-columns:1fr}.ball{width:150px;height:150px;font-size:3.2rem}.lottery-wrap{padding:20px 14px}
+}
+</style>
 </head>
 <body>
 
+<div class="app">
   <nav class="sidebar">
-    <div class="logo">
-      <h2>Bani Syahir</h2>
-      <p>Aplikasi Arisan</p>
-    </div>
+    <div class="logo"><h2>Bani Syahir</h2><p>Aplikasi Arisan</p></div>
     <ul class="nav-links">
-      <li><a href="#" onclick="showPage('dashboard'); return false;" class="active" id="nav-dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
-      <li><a href="#" onclick="showPage('keluarga'); return false;" id="nav-keluarga"><i class="fas fa-users"></i> Data Keluarga</a></li>
-      <li><a href="#" onclick="showPage('peserta'); return false;" id="nav-peserta"><i class="fas fa-list-check"></i> Peserta</a></li>
-      <li><a href="#" onclick="showPage('undian'); return false;" id="nav-undian"><i class="fas fa-dharmachakra"></i> Undian</a></li>
-      <li><a href="#" onclick="showPage('pemenang'); return false;" id="nav-pemenang"><i class="fas fa-trophy"></i> Pemenang</a></li>
+      <li><a href="#dashboard" id="nav-dashboard" class="active" onclick="showPage('dashboard');return false;"><i class="fas fa-home"></i><span>Dashboard</span></a></li>
+      <li><a href="#keluarga" id="nav-keluarga" onclick="showPage('keluarga');return false;"><i class="fas fa-users"></i><span>Keluarga</span></a></li>
+      <li><a href="#peserta" id="nav-peserta" onclick="showPage('peserta');return false;"><i class="fas fa-list-check"></i><span>Peserta</span></a></li>
+      <li><a href="#undian" id="nav-undian" onclick="showPage('undian');return false;"><i class="fas fa-dharmachakra"></i><span>Undian</span></a></li>
+      <li><a href="#pemenang" id="nav-pemenang" onclick="showPage('pemenang');return false;"><i class="fas fa-trophy"></i><span>Pemenang</span></a></li>
     </ul>
   </nav>
 
-  <main class="main-content">
-    <div id="toast" class="toast hidden">Notifikasi</div>
-
-    <div id="loader" class="loader-overlay hidden">
-      <div class="spinner"></div>
-      <p id="loader-text">Memproses data...</p>
-    </div>
-
-    <div id="api-warning" class="api-warning hidden">
-      <strong>API belum diatur.</strong><br>
-      Buka file ini, cari <code>API_URL</code> di bagian JavaScript, lalu isi dengan URL Web App Google Apps Script Anda.
-    </div>
+  <main class="main">
+    <div id="toast" class="toast hidden"></div>
+    <div id="loader" class="loader hidden"><div class="spinner"></div><p id="loader-text">Memproses data...</p></div>
 
     <section id="page-dashboard" class="page active">
       <div class="hero">
         <h1>Arisan Bani Syahir</h1>
         <p>Keluarga Besar Bani Syahir</p>
+        <div id="api-status" class="api-status">● Mengecek koneksi...</div>
       </div>
       <div class="cards">
         <div class="card"><h3 id="dash-keluarga">0</h3><p>Total Keluarga</p></div>
@@ -427,880 +108,435 @@
       </div>
     </section>
 
-    <section id="page-keluarga" class="page hidden">
-      <div class="page-header">
+    <section id="page-keluarga" class="page">
+      <div class="page-head">
         <h2>Data Keluarga</h2>
-        <button onclick="openModalKeluarga()" class="btn btn-primary"><i class="fas fa-plus"></i> Tambah</button>
+        <button class="btn btn-primary" onclick="openKeluarga()"><i class="fas fa-plus"></i> Tambah</button>
       </div>
       <div class="filters">
         <input id="search-keluarga" type="search" placeholder="Cari nama / nomor arisan..." oninput="renderKeluarga()">
       </div>
-      <div class="table-container">
-        <table id="tbl-keluarga">
-          <thead>
-            <tr>
-              <th>Foto</th>
-              <th>No. Arisan</th>
-              <th>Nama Lengkap</th>
-              <th>Status</th>
-              <th>No. HP</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-        <div id="empty-keluarga" class="empty-state hidden">Belum ada data keluarga.</div>
+      <div class="table-box">
+        <table><thead><tr><th>Foto</th><th>No. Arisan</th><th>Nama</th><th>Status</th><th>No. HP</th><th>Ikut</th><th>Aksi</th></tr></thead>
+        <tbody id="tbody-keluarga"></tbody></table>
+        <div id="empty-keluarga" class="empty hidden">Belum ada data keluarga.</div>
       </div>
     </section>
 
-    <section id="page-peserta" class="page hidden">
-      <div class="page-header">
+    <section id="page-peserta" class="page">
+      <div class="page-head">
         <h2>Peserta Arisan</h2>
-        <button onclick="openModalPeserta()" class="btn btn-primary"><i class="fas fa-plus"></i> Tambah</button>
+        <button class="btn btn-primary" onclick="openPeserta()"><i class="fas fa-plus"></i> Tambah</button>
       </div>
       <div class="filters">
-        <select id="filter-tahun" onchange="renderPeserta()"></select>
-        <select id="filter-acara" onchange="renderPeserta()">
+        <select id="filter-tahun"></select>
+        <select id="filter-acara">
           <option value="Idul Fitri">Idul Fitri</option>
           <option value="Maulid Nabi Muhammad SAW">Maulid Nabi Muhammad SAW</option>
         </select>
         <input id="search-peserta" type="search" placeholder="Cari nama / nomor..." oninput="renderPeserta()">
       </div>
-      <div class="table-container">
-        <table id="tbl-peserta">
-          <thead>
-            <tr>
-              <th>No. Arisan</th>
-              <th>Nama</th>
-              <th>Acara</th>
-              <th>Bulan</th>
-              <th>Status</th>
-              <th>Pembayaran</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-        <div id="empty-peserta" class="empty-state hidden">Tidak ada peserta pada filter ini.</div>
+      <div class="table-box">
+        <table><thead><tr><th>No. Arisan</th><th>Nama</th><th>Acara</th><th>Bulan</th><th>Pembayaran</th><th>Status</th><th>Aksi</th></tr></thead>
+        <tbody id="tbody-peserta"></tbody></table>
+        <div id="empty-peserta" class="empty hidden">Tidak ada peserta pada filter ini.</div>
       </div>
     </section>
 
-    <section id="page-undian" class="page hidden text-center">
+    <section id="page-undian" class="page undian">
       <h2>🎱 Mesin Undian Arisan</h2>
-      <p style="color:var(--muted);margin-top:6px">Hanya peserta aktif yang sudah membayar dan belum menang pada event yang dipilih yang masuk undian.</p>
-
-      <div class="filters" style="justify-content:center;margin-top:18px">
-        <select id="filter-undian-tahun"></select>
-        <select id="filter-undian-acara">
+      <p style="color:#6b7280;margin-top:5px">Pemenang resmi dipilih oleh Google Apps Script.</p>
+      <div class="filters" style="justify-content:center;margin-top:16px">
+        <select id="undian-tahun"></select>
+        <select id="undian-acara">
           <option value="Idul Fitri">Idul Fitri</option>
           <option value="Maulid Nabi Muhammad SAW">Maulid Nabi Muhammad SAW</option>
         </select>
       </div>
 
-      <div class="undian-container">
-        <div class="lottery-ball" id="lottery-display">--</div>
-        <button id="btn-undi" class="btn btn-large btn-primary" onclick="mulaiUndian()">
-          <i class="fas fa-play"></i> MULAI UNDIAN
-        </button>
+      <div class="lottery-wrap">
+        <div class="ball" id="ball">--</div>
+        <button id="btn-undi" class="btn btn-primary btn-lg" onclick="mulaiUndian()"><i class="fas fa-play"></i> MULAI UNDIAN</button>
       </div>
 
-      <div id="hasil-undian" class="hidden result-box">
-        <h3>Pemenang Ditemukan!</h3>
-        <img id="win-foto" class="winner-photo hidden" alt="Foto Pemenang">
-        <div id="win-nomor" class="win-number"></div>
+      <div id="result" class="result hidden">
+        <h3>🏆 Hasil Undian</h3>
+        <img id="win-foto" class="win-foto hidden" alt="Foto pemenang">
+        <div id="win-no" class="win-no">--</div>
         <h2 id="win-nama"></h2>
         <p id="win-detail"></p>
-        <div class="action-group" style="justify-content:center;margin-top:18px">
-          <button class="btn btn-success" onclick="konfirmasiSimpanPemenang()"><i class="fas fa-save"></i> Simpan Pemenang</button>
-          <button class="btn btn-danger" onclick="batalkanHasilUndian()"><i class="fas fa-rotate"></i> Batal / Undi Ulang</button>
+        <div class="actions" style="justify-content:center;margin-top:16px">
+          <button class="btn btn-success" onclick="simpanPemenang()"><i class="fas fa-save"></i> Simpan Pemenang</button>
+          <button class="btn btn-danger" onclick="batalUndian()">Undi Ulang</button>
         </div>
       </div>
 
-      <div class="section-title">
-        <h3>🏆 Yang Sudah Mendapatkan Arisan</h3>
-      </div>
-      <div class="winner-grid" id="recent-winner-container"></div>
+      <h3 style="max-width:1000px;margin:28px auto 12px;text-align:left">🏆 Yang Mendapatkan Arisan</h3>
+      <div id="recent-winners" class="winners"></div>
     </section>
 
-    <section id="page-pemenang" class="page hidden">
-      <div class="page-header">
-        <h2>🏆 Daftar Pemenang</h2>
-        <button onclick="loadPemenang()" class="btn btn-secondary"><i class="fas fa-refresh"></i> Refresh</button>
-      </div>
+    <section id="page-pemenang" class="page">
+      <div class="page-head"><h2>🏆 Daftar Pemenang</h2><button class="btn btn-secondary" onclick="loadPemenang()">Refresh</button></div>
       <div class="filters">
-        <select id="filter-pemenang-tahun" onchange="renderPemenang()"></select>
-        <select id="filter-pemenang-acara" onchange="renderPemenang()">
+        <select id="winner-tahun"></select>
+        <select id="winner-acara">
           <option value="">Semua Acara</option>
           <option value="Idul Fitri">Idul Fitri</option>
           <option value="Maulid Nabi Muhammad SAW">Maulid Nabi Muhammad SAW</option>
         </select>
       </div>
-      <div class="winner-grid" id="winner-container"></div>
-      <div id="empty-pemenang" class="empty-state hidden">Belum ada pemenang tersimpan.</div>
+      <div id="winner-grid" class="winners"></div>
+      <div id="empty-winner" class="empty hidden">Belum ada pemenang tersimpan.</div>
     </section>
   </main>
+</div>
 
-  <!-- Modal Keluarga -->
-  <div id="modal-keluarga" class="modal hidden" onclick="modalBackdrop(event, 'modal-keluarga')">
-    <div class="modal-content">
-      <h3 id="modal-keluarga-title">Tambah Keluarga</h3>
-      <form id="form-keluarga" onsubmit="submitKeluarga(event)">
-        <input type="hidden" id="kel-id">
-        <input type="hidden" id="kel-foto-url">
-        <div class="form-group">
-          <label>No Arisan</label>
-          <input type="text" id="kel-no" required autocomplete="off">
-        </div>
-        <div class="form-group">
-          <label>Nama Lengkap</label>
-          <input type="text" id="kel-nama" required autocomplete="name">
-        </div>
-        <div class="form-group">
-          <label>No HP</label>
-          <input type="text" id="kel-hp" inputmode="tel" autocomplete="tel">
-        </div>
-        <div class="form-group">
-          <label>Foto (Pilih file)</label>
-          <input type="file" id="kel-foto" accept="image/*">
-          <small style="display:block;color:var(--muted);margin-top:5px">Foto dikirim ke Google Apps Script untuk disimpan di Google Drive.</small>
-        </div>
-        <img id="kel-preview" class="preview-photo hidden" alt="Pratinjau Foto">
-        <div class="form-group">
-          <label>Status</label>
-          <select id="kel-status">
-            <option>Menikah</option>
-            <option>Menantu</option>
-            <option>Anak</option>
-            <option>Almarhum</option>
-          </select>
-        </div>
-        <div class="modal-actions">
-          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-keluarga')">Batal</button>
-          <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
-        </div>
-      </form>
-    </div>
+<!-- Modal Keluarga -->
+<div id="modal-keluarga" class="modal hidden" onclick="backdrop(event,'modal-keluarga')">
+  <div class="modal-card">
+    <h3 id="kel-title">Tambah Keluarga</h3>
+    <form id="form-keluarga" onsubmit="submitKeluarga(event)">
+      <input type="hidden" id="kel-id">
+      <input type="hidden" id="kel-foto-url">
+      <div class="form-row">
+        <div class="form-group"><label>No. Arisan *</label><input id="kel-no" required></div>
+        <div class="form-group"><label>Nama Lengkap *</label><input id="kel-nama" required></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Nama Pasangan</label><input id="kel-pasangan"></div>
+        <div class="form-group"><label>Generasi</label><input id="kel-generasi"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Anak Ke</label><input id="kel-anakke"></div>
+        <div class="form-group"><label>No. HP</label><input id="kel-hp" inputmode="tel"></div>
+      </div>
+      <div class="form-group"><label>Alamat</label><input id="kel-alamat"></div>
+      <div class="form-group"><label>Status</label>
+        <select id="kel-status"><option>Menikah</option><option>Menantu</option><option>Anak</option><option>Almarhum</option><option>Lainnya</option></select>
+      </div>
+      <div class="form-group">
+        <label><input type="checkbox" id="kel-ikut" checked style="width:auto;margin-right:8px"> Ikut Arisan</label>
+      </div>
+      <div class="form-group"><label>Foto</label><input type="file" id="kel-foto" accept="image/*"><small style="display:block;color:#6b7280;margin-top:4px">Maksimal 5 MB.</small></div>
+      <img id="kel-preview" class="preview hidden" alt="Preview foto">
+      <div class="form-group"><label>Catatan</label><input id="kel-catatan"></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-keluarga')">Batal</button>
+        <button class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
+      </div>
+    </form>
   </div>
+</div>
 
-  <!-- Modal Peserta -->
-  <div id="modal-peserta" class="modal hidden" onclick="modalBackdrop(event, 'modal-peserta')">
-    <div class="modal-content">
-      <h3 id="modal-peserta-title">Tambah Peserta</h3>
-      <form id="form-peserta" onsubmit="submitPeserta(event)">
-        <input type="hidden" id="pes-id">
-        <div class="form-group">
-          <label>Keluarga</label>
-          <select id="pes-keluarga" required onchange="autoFillPeserta()"></select>
-        </div>
-        <div class="form-group">
-          <label>No Arisan</label>
-          <input type="text" id="pes-no" readonly>
-        </div>
-        <div class="form-group">
-          <label>Acara</label>
-          <select id="pes-acara">
-            <option>Idul Fitri</option>
-            <option>Maulid Nabi Muhammad SAW</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Tahun</label>
-          <input type="number" id="pes-tahun" min="2020" max="2100" required>
-        </div>
-        <div class="form-group">
-          <label>Nominal</label>
-          <input type="number" id="pes-nominal" min="0" step="1000" value="100000" required>
-        </div>
-        <div class="modal-actions">
-          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-peserta')">Batal</button>
-          <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
-        </div>
-      </form>
-    </div>
+<!-- Modal Peserta -->
+<div id="modal-peserta" class="modal hidden" onclick="backdrop(event,'modal-peserta')">
+  <div class="modal-card">
+    <h3 id="pes-title">Tambah Peserta</h3>
+    <form id="form-peserta" onsubmit="submitPeserta(event)">
+      <input type="hidden" id="pes-id">
+      <div class="form-group"><label>Keluarga *</label><select id="pes-keluarga" required onchange="fillPeserta()"></select></div>
+      <div class="form-row">
+        <div class="form-group"><label>No. Arisan</label><input id="pes-no" readonly></div>
+        <div class="form-group"><label>Nama Peserta</label><input id="pes-nama" readonly></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Acara *</label><select id="pes-acara"><option>Idul Fitri</option><option>Maulid Nabi Muhammad SAW</option></select></div>
+        <div class="form-group"><label>Tahun *</label><input id="pes-tahun" type="number" min="2000" max="2100" required></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Tanggal Arisan</label><input id="pes-tanggal" type="date"></div>
+        <div class="form-group"><label>Nominal</label><input id="pes-nominal" type="number" min="0" step="1000" value="100000"></div>
+      </div>
+      <div class="form-group"><label>Catatan</label><input id="pes-catatan"></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-peserta')">Batal</button>
+        <button class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
+      </div>
+    </form>
   </div>
+</div>
 
-  <script>
-    /* =========================================================
-       KONFIGURASI
-       Ganti URL ini dengan URL Web App Google Apps Script Anda.
-       Contoh:
-       https://script.google.com/macros/s/XXXXXXXX/exec
-       ========================================================= */
-    const API_URL = "https://script.google.com/macros/s/AKfycbz0xOlnyO-TeDTJVtDMgPtqATotkwVHoCMFjXXSvXVZfnw-YCGCp1W4mc2JICFGtVd1/exec";
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbz0xOlnyO-TeDTJVtDMgPtqATotkwVHoCMFjXXSvXVZfnw-YCGCp1W4mc2JICFGtVd1/exec";
 
-    // State
-    let dataKeluarga = [];
-    let dataPeserta = [];
-    let dataPemenang = [];
-    let calonPemenang = null;
-    let intervalUndian = null;
-    let loaderCount = 0;
-    let toastTimer = null;
+let dataKeluarga=[], dataPeserta=[], dataPemenang=[], calonPemenang=null, spinTimer=null, toastTimer=null, loaderCount=0;
 
-    const rupiah = new Intl.NumberFormat('id-ID');
-    const bulanNama = [
-      'Januari','Februari','Maret','April','Mei','Juni',
-      'Juli','Agustus','September','Oktober','November','Desember'
-    ];
+const months=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
 
-    function isApiConfigured() {
-      return API_URL &&
-             !API_URL.includes("ISI_URL") &&
-             API_URL.startsWith("http");
+function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
+function bool(v){return v===true||String(v).toLowerCase()==="true"||v===1||String(v)==="1"}
+function photo(v){return v?.Foto||v?.foto||v?.["Foto URL"]||v?.["URL Foto"]||""}
+function yearNow(){return new Date().getFullYear()}
+function monthFrom(v){
+  if(v?.["Bulan Arisan"]) return v["Bulan Arisan"];
+  const x=v?.["Tanggal Arisan"]||v?.Tanggal;
+  if(!x)return"-";
+  const d=new Date(x); return isNaN(d)? "-": months[d.getMonth()]
+}
+function loaderOn(t){loaderCount++;document.getElementById("loader-text").textContent=t;document.getElementById("loader").classList.remove("hidden")}
+function loaderOff(){loaderCount=Math.max(0,loaderCount-1);if(loaderCount===0)document.getElementById("loader").classList.add("hidden")}
+function toast(msg,error=false){
+  const t=document.getElementById("toast");t.textContent=msg;t.style.background=error?"var(--danger)":"var(--success)";t.classList.remove("hidden");
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.add("hidden"),3300)
+}
+function openModal(id){document.getElementById(id).classList.remove("hidden")}
+function closeModal(id){document.getElementById(id).classList.add("hidden")}
+function backdrop(e,id){if(e.target.id===id)closeModal(id)}
+
+async function api(action,payload={},label="Memproses data..."){
+  loaderOn(label);
+  try{
+    const res=await fetch(API_URL,{method:"POST",body:JSON.stringify({action,payload})});
+    if(!res.ok)throw new Error("HTTP "+res.status);
+    const text=await res.text();let json;
+    try{json=JSON.parse(text)}catch(_){throw new Error("Respons API bukan JSON. Periksa deployment Web App Google Apps Script.")}
+    if(!json.success)throw new Error(json.message||"Operasi gagal");
+    return json.data;
+  }finally{loaderOff()}
+}
+
+function setYears(){
+  const current=yearNow(), arr=[];
+  for(let y=current-2;y<=current+5;y++)arr.push(y);
+  const ids=["filter-tahun","undian-tahun","winner-tahun"];
+  ids.forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    el.innerHTML=(id==="winner-tahun"?'<option value="">Semua Tahun</option>':"")+arr.map(y=>`<option value="${y}">${y}</option>`).join("");
+    el.value=id==="winner-tahun"?"":String(current);
+  });
+  document.getElementById("pes-tahun").value=current;
+}
+
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".nav-links a").forEach(a=>a.classList.remove("active"));
+  document.getElementById("page-"+id).classList.add("active");
+  document.getElementById("nav-"+id).classList.add("active");
+  if(location.hash!=="#"+id)history.replaceState(null,"","#"+id);
+  if(id==="dashboard")loadDashboard();
+  else if(id==="keluarga")loadKeluarga();
+  else if(id==="peserta")loadPeserta();
+  else if(id==="undian"){loadPeserta();loadPemenang()}
+  else if(id==="pemenang")loadPemenang();
+}
+
+async function loadDashboard(){
+  try{
+    const d=await api("getDashboard",{},"Menghubungkan ke Google Sheets...");
+    document.getElementById("dash-keluarga").textContent=d?.totalKeluarga??0;
+    document.getElementById("dash-peserta").textContent=d?.totalPeserta??0;
+    document.getElementById("dash-bayar").textContent=d?.sudahBayar??0;
+    document.getElementById("dash-belum").textContent=d?.belumBayar??0;
+    document.getElementById("dash-pemenang").textContent=d?.totalPemenang??0;
+    document.getElementById("api-status").textContent="● Terhubung ke Google Sheets";
+    document.getElementById("api-status").style.background="#dcfce7";
+    document.getElementById("api-status").style.color="#166534";
+  }catch(e){
+    document.getElementById("api-status").textContent="● API bermasalah: "+e.message;
+    document.getElementById("api-status").style.background="#fee2e2";
+    document.getElementById("api-status").style.color="#991b1b";
+    toast(e.message,true);
+  }
+}
+
+async function loadKeluarga(){
+  try{dataKeluarga=await api("getKeluarga",{},"Memuat data keluarga...");if(!Array.isArray(dataKeluarga))dataKeluarga=[];renderKeluarga()}
+  catch(e){dataKeluarga=[];renderKeluarga()}
+}
+function renderKeluarga(){
+  const q=(document.getElementById("search-keluarga").value||"").toLowerCase().trim(), body=document.getElementById("tbody-keluarga");
+  const rows=dataKeluarga.filter(k=>`${k?.["Nomor Arisan"]||""} ${k?.["Nama Lengkap"]||""}`.toLowerCase().includes(q));
+  document.getElementById("empty-keluarga").classList.toggle("hidden",rows.length>0);
+  body.innerHTML=rows.map(k=>{
+    const p=photo(k);
+    return `<tr>
+      <td>${p?`<img class="thumb" src="${esc(p)}" alt="foto" loading="lazy">`:"-"}</td>
+      <td><strong>${esc(k?.["Nomor Arisan"])}</strong></td>
+      <td>${esc(k?.["Nama Lengkap"])}</td>
+      <td>${esc(k?.Status)}</td>
+      <td>${esc(k?.["Nomor HP"])}</td>
+      <td>${bool(k?.["Ikut Arisan"]??true)?'<span class="badge badge-ok">Ya</span>':'<span class="badge badge-no">Tidak</span>'}</td>
+      <td><div class="actions">
+        <button class="btn btn-secondary btn-sm" onclick="editKeluarga('${esc(k?.ID)}')">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="hapusKeluarga('${esc(k?.ID)}')">Hapus</button>
+      </div></td>
+    </tr>`
+  }).join("")
+}
+
+function resetFotoPreview(){const x=document.getElementById("kel-preview");x.classList.add("hidden");x.removeAttribute("src")}
+function openKeluarga(k=null){
+  document.getElementById("form-keluarga").reset();document.getElementById("kel-id").value="";document.getElementById("kel-foto-url").value="";
+  document.getElementById("kel-ikut").checked=true;resetFotoPreview();
+  document.getElementById("kel-title").textContent=k?"Edit Keluarga":"Tambah Keluarga";
+  if(k){
+    document.getElementById("kel-id").value=k.ID||"";
+    document.getElementById("kel-no").value=k["Nomor Arisan"]||"";
+    document.getElementById("kel-nama").value=k["Nama Lengkap"]||"";
+    document.getElementById("kel-pasangan").value=k["Nama Pasangan"]||"";
+    document.getElementById("kel-generasi").value=k.Generasi||"";
+    document.getElementById("kel-anakke").value=k["Anak Ke"]||"";
+    document.getElementById("kel-hp").value=k["Nomor HP"]||"";
+    document.getElementById("kel-alamat").value=k.Alamat||"";
+    document.getElementById("kel-status").value=k.Status||"Menikah";
+    document.getElementById("kel-ikut").checked=bool(k["Ikut Arisan"]??true);
+    document.getElementById("kel-catatan").value=k.Catatan||"";
+    const p=photo(k);document.getElementById("kel-foto-url").value=p;
+    if(p){const img=document.getElementById("kel-preview");img.src=p;img.classList.remove("hidden")}
+  }
+  openModal("modal-keluarga")
+}
+function editKeluarga(id){const k=dataKeluarga.find(x=>String(x.ID)===String(id));if(k)openKeluarga(k);else toast("Data tidak ditemukan.",true)}
+document.getElementById("kel-foto").addEventListener("change",e=>{
+  const f=e.target.files?.[0];if(!f)return;if(f.size>5*1024*1024){toast("Ukuran foto maksimal 5 MB.",true);e.target.value="";return}
+  const p=document.getElementById("kel-preview");p.src=URL.createObjectURL(f);p.classList.remove("hidden")
+})
+function toDataUrl(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)})}
+async function submitKeluarga(e){
+  e.preventDefault();
+  try{
+    let foto=document.getElementById("kel-foto-url").value||"";
+    const file=document.getElementById("kel-foto").files?.[0];
+    if(file){
+      const base64=await toDataUrl(file);
+      foto=await api("uploadFoto",{base64,mimeType:file.type,filename:file.name},"Mengunggah foto...")
     }
+    const payload={
+      ID:document.getElementById("kel-id").value,
+      NomorArisan:document.getElementById("kel-no").value.trim(),
+      NamaLengkap:document.getElementById("kel-nama").value.trim(),
+      NamaPasangan:document.getElementById("kel-pasangan").value.trim(),
+      Generasi:document.getElementById("kel-generasi").value.trim(),
+      AnakKe:document.getElementById("kel-anakke").value.trim(),
+      Alamat:document.getElementById("kel-alamat").value.trim(),
+      NomorHP:document.getElementById("kel-hp").value.trim(),
+      Foto:foto,
+      Status:document.getElementById("kel-status").value,
+      IkutArisan:document.getElementById("kel-ikut").checked,
+      Catatan:document.getElementById("kel-catatan").value.trim()
+    };
+    await api("saveKeluarga",payload,"Menyimpan keluarga...");
+    closeModal("modal-keluarga");toast("Data keluarga berhasil disimpan.");await loadKeluarga()
+  }catch(e){toast(e.message,true)}
+}
+async function hapusKeluarga(id){
+  if(!confirm("Hapus data keluarga ini?"))return;
+  try{await api("hapusKeluarga",{id},"Menghapus keluarga...");toast("Data berhasil dihapus.");await loadKeluarga()}
+  catch(e){toast(e.message,true)}
+}
 
-    function initYearOptions() {
-      const tahunSekarang = new Date().getFullYear();
-      const daftarTahun = [];
-      for (let y = tahunSekarang - 2; y <= tahunSekarang + 5; y++) daftarTahun.push(y);
+async function loadPeserta(){
+  try{
+    const results=await Promise.all([api("getPeserta",{},"Memuat peserta..."),dataKeluarga.length?Promise.resolve(dataKeluarga):api("getKeluarga",{},"Memuat keluarga...")]);
+    dataPeserta=Array.isArray(results[0])?results[0]:[];if(!dataKeluarga.length)dataKeluarga=Array.isArray(results[1])?results[1]:[];
+    renderPeserta();return dataPeserta
+  }catch(e){dataPeserta=[];renderPeserta();return[]}
+}
+function renderPeserta(){
+  const y=document.getElementById("filter-tahun").value,a=document.getElementById("filter-acara").value,q=(document.getElementById("search-peserta").value||"").toLowerCase().trim();
+  const rows=dataPeserta.filter(p=>String(p?.Tahun)===String(y)&&String(p?.["Jenis Acara"])===a&&`${p?.["Nomor Arisan"]||""} ${p?.["Nama Peserta"]||""}`.toLowerCase().includes(q));
+  document.getElementById("empty-peserta").classList.toggle("hidden",rows.length>0);
+  document.getElementById("tbody-peserta").innerHTML=rows.map(p=>{
+    const b=bool(p.Pembayaran), menang=String(p?.["Status Pemenang"]||"").toLowerCase()==="sudah";
+    return `<tr>
+      <td><strong>${esc(p?.["Nomor Arisan"])}</strong></td>
+      <td>${esc(p?.["Nama Peserta"])} ${menang?"🏆":""}</td>
+      <td>${esc(p?.["Jenis Acara"])} ${esc(p?.Tahun)}</td>
+      <td>${esc(monthFrom(p))}</td>
+      <td><label style="cursor:pointer"><input type="checkbox" ${b?"checked":""} onchange="bayar('${esc(p.ID)}',this.checked)" style="transform:scale(1.3);margin-right:7px"><span class="badge ${b?"badge-ok":"badge-no"}">${b?"LUNAS":"BELUM"}</span></label></td>
+      <td>${menang?'<span class="badge badge-ok">Pemenang</span>':'<span class="badge badge-muted">Aktif</span>'}</td>
+      <td><div class="actions">
+        <button class="btn btn-secondary btn-sm" onclick="editPeserta('${esc(p.ID)}')">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="hapusPeserta('${esc(p.ID)}')">Hapus</button>
+      </div></td>
+    </tr>`
+  }).join("")
+}
+function openPeserta(p=null){
+  document.getElementById("form-peserta").reset();document.getElementById("pes-id").value="";document.getElementById("pes-title").textContent=p?"Edit Peserta":"Tambah Peserta";
+  const s=document.getElementById("pes-keluarga");
+  s.innerHTML='<option value="">-- Pilih Keluarga --</option>'+dataKeluarga.filter(k=>bool(k?.["Ikut Arisan"]??true)).map(k=>`<option value="${esc(k.ID)}" data-no="${esc(k?.["Nomor Arisan"])}" data-nama="${esc(k?.["Nama Lengkap"])}">${esc(k?.["Nomor Arisan"])} - ${esc(k?.["Nama Lengkap"])}</option>`).join("");
+  document.getElementById("pes-tahun").value=document.getElementById("filter-tahun").value||yearNow();document.getElementById("pes-acara").value=document.getElementById("filter-acara").value||"Idul Fitri";document.getElementById("pes-nominal").value=100000;
+  if(p){
+    document.getElementById("pes-id").value=p.ID||"";s.value=p["ID Keluarga"]||"";
+    document.getElementById("pes-acara").value=p["Jenis Acara"]||"Idul Fitri";document.getElementById("pes-tahun").value=p.Tahun||yearNow();
+    document.getElementById("pes-tanggal").value=(p["Tanggal Arisan"]?String(p["Tanggal Arisan"]).slice(0,10):"");
+    document.getElementById("pes-nominal").value=p.Nominal??100000;document.getElementById("pes-catatan").value=p.Catatan||"";
+    fillPeserta();document.getElementById("pes-no").value=p["Nomor Arisan"]||document.getElementById("pes-no").value
+  }else fillPeserta();
+  openModal("modal-peserta")
+}
+function fillPeserta(){const s=document.getElementById("pes-keluarga"),o=s.options[s.selectedIndex];document.getElementById("pes-no").value=o?.dataset?.no||"";document.getElementById("pes-nama").value=o?.dataset?.nama||""}
+function editPeserta(id){const p=dataPeserta.find(x=>String(x.ID)===String(id));if(p)openPeserta(p);else toast("Peserta tidak ditemukan.",true)}
+async function submitPeserta(e){
+  e.preventDefault();const s=document.getElementById("pes-keluarga"),o=s.options[s.selectedIndex];
+  if(!o?.value){toast("Pilih keluarga.",true);return}
+  const payload={ID:document.getElementById("pes-id").value,IDKeluarga:s.value,NomorArisan:document.getElementById("pes-no").value,NamaPeserta:document.getElementById("pes-nama").value,JenisAcara:document.getElementById("pes-acara").value,Tahun:document.getElementById("pes-tahun").value,TanggalArisan:document.getElementById("pes-tanggal").value,Nominal:Number(document.getElementById("pes-nominal").value||0),Catatan:document.getElementById("pes-catatan").value.trim()};
+  try{await api("savePeserta",payload,"Menyimpan peserta...");closeModal("modal-peserta");toast("Peserta berhasil disimpan.");await loadPeserta()}catch(e){toast(e.message,true)}
+}
+async function bayar(id,status){try{await api("updatePembayaran",{id,status},"Menyimpan pembayaran...");const p=dataPeserta.find(x=>String(x.ID)===String(id));if(p){p.Pembayaran=status;p["Tanggal Pembayaran"]=status?new Date().toISOString():""}renderPeserta();toast(status?"Pembayaran ditandai LUNAS.":"Pembayaran dibatalkan.")}catch(e){toast(e.message,true);renderPeserta()}}
+async function hapusPeserta(id){if(!confirm("Hapus peserta ini?"))return;try{await api("hapusPeserta",{id},"Menghapus peserta...");toast("Peserta berhasil dihapus.");await loadPeserta()}catch(e){toast(e.message,true)}}
 
-      ['filter-tahun','filter-undian-tahun','filter-pemenang-tahun'].forEach(id => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        const allOption = id === 'filter-pemenang-tahun'
-          ? '<option value="">Semua Tahun</option>' : '';
-        el.innerHTML = allOption + daftarTahun.map(y => `<option value="${y}">${y}</option>`).join('');
-        el.value = (id === 'filter-pemenang-tahun') ? '' : tahunSekarang;
-      });
-
-      const pesTahun = document.getElementById('pes-tahun');
-      if (pesTahun) pesTahun.value = tahunSekarang;
+async function mulaiUndian(){
+  const tahun=document.getElementById("undian-tahun").value,acara=document.getElementById("undian-acara").value,btn=document.getElementById("btn-undi"),ball=document.getElementById("ball");
+  if(spinTimer)clearInterval(spinTimer);calonPemenang=null;document.getElementById("result").classList.add("hidden");
+  let data;
+  try{data=await api("undiArisan",{Tahun:tahun,JenisAcara:acara},"Menyiapkan undian...")}catch(e){toast(e.message,true);return}
+  if(!data?.winner||!Array.isArray(data.candidates)||!data.candidates.length){toast("Tidak ada kandidat yang memenuhi syarat.",true);return}
+  btn.disabled=true;ball.classList.add("spin");let elapsed=0;const total=4500,tick=70;
+  spinTimer=setInterval(()=>{
+    const c=data.candidates[Math.floor(Math.random()*data.candidates.length)];ball.textContent=c?.["Nomor Arisan"]||"--";elapsed+=tick;
+    if(elapsed>=total){
+      clearInterval(spinTimer);spinTimer=null;ball.classList.remove("spin");calonPemenang=data.winner;ball.textContent=calonPemenang?.["Nomor Arisan"]||"--";
+      document.getElementById("win-no").textContent=calonPemenang?.["Nomor Arisan"]||"--";document.getElementById("win-nama").textContent=calonPemenang?.["Nama Peserta"]||"";
+      document.getElementById("win-detail").textContent=`${acara} ${tahun}`;
+      const p=photo(calonPemenang),img=document.getElementById("win-foto");if(p){img.src=p;img.classList.remove("hidden")}else{img.classList.add("hidden");img.removeAttribute("src")}
+      document.getElementById("result").classList.remove("hidden");btn.disabled=false
     }
-
-    function escapeHtml(value) {
-      return String(value ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    }
-
-    function toBool(value) {
-      return value === true || value === "TRUE" || value === "true" || value === 1 || value === "1";
-    }
-
-    function getPhotoUrl(obj) {
-      return obj?.Foto || obj?.foto || obj?.['Foto URL'] || obj?.['URL Foto'] || '';
-    }
-
-    function getBulan(obj) {
-      const direct = obj?.['Bulan Arisan'] || obj?.Bulan;
-      if (direct) return direct;
-      const tgl = obj?.['Tanggal Arisan'] || obj?.Tanggal || obj?.['Tanggal Pembayaran'];
-      if (!tgl) return '-';
-      const d = new Date(tgl);
-      if (!isNaN(d.getTime())) return bulanNama[d.getMonth()];
-      return '-';
-    }
-
-    function getTahunFilter() {
-      return document.getElementById('filter-tahun')?.value || new Date().getFullYear();
-    }
-
-    function getAcaraFilter() {
-      return document.getElementById('filter-acara')?.value || 'Idul Fitri';
-    }
-
-    function showLoader(text = "Memproses data...") {
-      loaderCount++;
-      const el = document.getElementById('loader');
-      const txt = document.getElementById('loader-text');
-      if (txt) txt.textContent = text;
-      el.classList.remove('hidden');
-    }
-
-    function hideLoader() {
-      loaderCount = Math.max(0, loaderCount - 1);
-      if (loaderCount === 0) document.getElementById('loader').classList.add('hidden');
-    }
-
-    function showToast(msg, isError = false) {
-      const t = document.getElementById('toast');
-      t.textContent = msg;
-      t.style.background = isError ? 'var(--danger)' : 'var(--success)';
-      t.classList.remove('hidden');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => t.classList.add('hidden'), 3200);
-    }
-
-    function openModal(id) {
-      document.getElementById(id).classList.remove('hidden');
-    }
-
-    function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
-    }
-
-    function modalBackdrop(event, id) {
-      if (event.target.id === id) closeModal(id);
-    }
-
-    async function apiCall(action, payload = {}, loaderText = "Memproses data...") {
-      if (!isApiConfigured()) {
-        const msg = "API_URL belum diisi. Masukkan URL Web App Google Apps Script di file index.html.";
-        showToast(msg, true);
-        throw new Error(msg);
-      }
-
-      showLoader(loaderText);
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          body: JSON.stringify({ action, payload })
-        });
-
-        if (!res.ok) throw new Error("HTTP " + res.status);
-
-        const text = await res.text();
-        let json;
-        try {
-          json = JSON.parse(text);
-        } catch {
-          throw new Error("Respons Google Apps Script bukan JSON. Periksa deployment Web App.");
-        }
-
-        if (!json.success) throw new Error(json.message || "Operasi gagal");
-        return json.data;
-      } catch (err) {
-        showToast("Error: " + (err.message || err), true);
-        throw err;
-      } finally {
-        hideLoader();
-      }
-    }
-
-    function showPage(pageId) {
-      document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-
-      const page = document.getElementById('page-' + pageId);
-      const nav = document.getElementById('nav-' + pageId);
-      if (page) {
-        page.classList.remove('hidden');
-        page.classList.add('active');
-      }
-      if (nav) nav.classList.add('active');
-
-      if (pageId === 'dashboard') loadDashboard();
-      if (pageId === 'keluarga') loadKeluarga();
-      if (pageId === 'peserta') loadPeserta();
-      if (pageId === 'undian') {
-        loadPeserta().catch(() => {});
-        loadPemenang().catch(() => {});
-      }
-      if (pageId === 'pemenang') loadPemenang();
-    }
-
-    async function loadDashboard() {
-      try {
-        const data = await apiCall("getDashboard", {}, "Memuat dashboard...");
-        document.getElementById('dash-keluarga').textContent = data?.totalKeluarga ?? 0;
-        document.getElementById('dash-peserta').textContent = data?.totalPeserta ?? 0;
-        document.getElementById('dash-bayar').textContent = data?.sudahBayar ?? 0;
-        document.getElementById('dash-belum').textContent = data?.belumBayar ?? 0;
-        document.getElementById('dash-pemenang').textContent = data?.totalPemenang ?? 0;
-      } catch {}
-    }
-
-    async function loadKeluarga() {
-      try {
-        dataKeluarga = await apiCall("getKeluarga", {}, "Memuat data keluarga...");
-        if (!Array.isArray(dataKeluarga)) dataKeluarga = [];
-        renderKeluarga();
-      } catch {
-        dataKeluarga = [];
-        renderKeluarga();
-      }
-    }
-
-    function renderKeluarga() {
-      const q = (document.getElementById('search-keluarga')?.value || '').trim().toLowerCase();
-      const tbody = document.querySelector("#tbl-keluarga tbody");
-      const empty = document.getElementById("empty-keluarga");
-
-      const filtered = dataKeluarga.filter(k => {
-        const hay = `${k?.['Nomor Arisan'] || ''} ${k?.['Nama Lengkap'] || ''}`.toLowerCase();
-        return !q || hay.includes(q);
-      });
-
-      if (!filtered.length) {
-        tbody.innerHTML = '';
-        empty.classList.remove('hidden');
-        return;
-      }
-      empty.classList.add('hidden');
-
-      tbody.innerHTML = filtered.map(k => {
-        const foto = getPhotoUrl(k);
-        return `
-          <tr>
-            <td>${foto ? `<img class="thumb" src="${escapeHtml(foto)}" alt="Foto" loading="lazy">` : '<span class="badge-muted">Tanpa foto</span>'}</td>
-            <td><strong>${escapeHtml(k?.['Nomor Arisan'])}</strong></td>
-            <td>${escapeHtml(k?.['Nama Lengkap'])}</td>
-            <td>${escapeHtml(k?.Status)}</td>
-            <td>${escapeHtml(k?.['Nomor HP'])}</td>
-            <td>
-              <div class="action-group">
-                <button class="btn btn-secondary btn-small" onclick="editKeluarga('${escapeHtml(k?.ID)}')"><i class="fas fa-pen"></i></button>
-                <button class="btn btn-danger btn-small" onclick="hapusKeluarga('${escapeHtml(k?.ID)}')"><i class="fas fa-trash"></i></button>
-              </div>
-            </td>
-          </tr>`;
-      }).join('');
-    }
-
-    function openModalKeluarga(k = null) {
-      document.getElementById('form-keluarga').reset();
-      document.getElementById('kel-id').value = '';
-      document.getElementById('kel-foto-url').value = '';
-      document.getElementById('kel-preview').classList.add('hidden');
-      document.getElementById('kel-preview').removeAttribute('src');
-
-      document.getElementById('modal-keluarga-title').textContent = k ? 'Edit Keluarga' : 'Tambah Keluarga';
-      if (k) {
-        document.getElementById('kel-id').value = k.ID || '';
-        document.getElementById('kel-no').value = k['Nomor Arisan'] || '';
-        document.getElementById('kel-nama').value = k['Nama Lengkap'] || '';
-        document.getElementById('kel-hp').value = k['Nomor HP'] || '';
-        document.getElementById('kel-status').value = k.Status || 'Menikah';
-        const foto = getPhotoUrl(k);
-        document.getElementById('kel-foto-url').value = foto;
-        if (foto) {
-          const preview = document.getElementById('kel-preview');
-          preview.src = foto;
-          preview.classList.remove('hidden');
-        }
-      }
-      openModal('modal-keluarga');
-    }
-
-    function editKeluarga(id) {
-      const k = dataKeluarga.find(x => String(x.ID) === String(id));
-      if (!k) return showToast("Data keluarga tidak ditemukan.", true);
-      openModalKeluarga(k);
-    }
-
-    document.getElementById('kel-foto').addEventListener('change', function() {
-      const file = this.files?.[0];
-      if (!file) return;
-      const preview = document.getElementById('kel-preview');
-      preview.src = URL.createObjectURL(file);
-      preview.classList.remove('hidden');
-    });
-
-    async function fileToDataURL(file) {
-      return await new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-
-    async function submitKeluarga(e) {
-      e.preventDefault();
-      const fileInput = document.getElementById('kel-foto');
-
-      try {
-        let foto = document.getElementById('kel-foto-url').value || '';
-
-        if (fileInput.files.length > 0) {
-          const file = fileInput.files[0];
-          if (file.size > 5 * 1024 * 1024) {
-            throw new Error("Ukuran foto maksimal 5 MB.");
-          }
-          const base64 = await fileToDataURL(file);
-          foto = await apiCall(
-            "uploadFoto",
-            { base64, mimeType: file.type, filename: file.name },
-            "Mengunggah foto..."
-          );
-        }
-
-        const payload = {
-          ID: document.getElementById('kel-id').value,
-          NomorArisan: document.getElementById('kel-no').value.trim(),
-          NamaLengkap: document.getElementById('kel-nama').value.trim(),
-          NomorHP: document.getElementById('kel-hp').value.trim(),
-          Status: document.getElementById('kel-status').value,
-          Foto: foto
-        };
-
-        if (!payload.NomorArisan || !payload.NamaLengkap) {
-          throw new Error("Nomor arisan dan nama lengkap wajib diisi.");
-        }
-
-        await apiCall("saveKeluarga", payload, "Menyimpan data keluarga...");
-        closeModal('modal-keluarga');
-        showToast("Data keluarga berhasil disimpan.");
-        await loadKeluarga();
-      } catch {}
-    }
-
-    async function hapusKeluarga(id) {
-      if (!id) return;
-      if (!confirm("Hapus data keluarga ini? Data peserta terkait harus dicek kembali di database.")) return;
-      try {
-        await apiCall("hapusKeluarga", { id }, "Menghapus data keluarga...");
-        showToast("Data keluarga berhasil dihapus.");
-        await loadKeluarga();
-      } catch {}
-    }
-
-    async function loadPeserta() {
-      try {
-        const results = await Promise.all([
-          apiCall("getPeserta", {}, "Memuat data peserta..."),
-          dataKeluarga.length ? Promise.resolve(dataKeluarga) : apiCall("getKeluarga", {}, "Memuat data keluarga...")
-        ]);
-        dataPeserta = Array.isArray(results[0]) ? results[0] : [];
-        if (!dataKeluarga.length) dataKeluarga = Array.isArray(results[1]) ? results[1] : [];
-        renderPeserta();
-        return dataPeserta;
-      } catch {
-        dataPeserta = [];
-        renderPeserta();
-        return [];
-      }
-    }
-
-    function renderPeserta() {
-      const tahun = document.getElementById('filter-tahun')?.value;
-      const acara = document.getElementById('filter-acara')?.value;
-      const q = (document.getElementById('search-peserta')?.value || '').trim().toLowerCase();
-
-      const filtered = dataPeserta.filter(p => {
-        const hay = `${p?.['Nomor Arisan'] || ''} ${p?.['Nama Peserta'] || ''}`.toLowerCase();
-        return String(p?.Tahun ?? '') === String(tahun) &&
-               String(p?.['Jenis Acara'] ?? '') === String(acara) &&
-               (!q || hay.includes(q));
-      });
-
-      const tbody = document.querySelector("#tbl-peserta tbody");
-      const empty = document.getElementById("empty-peserta");
-
-      if (!filtered.length) {
-        tbody.innerHTML = '';
-        empty.classList.remove('hidden');
-        return;
-      }
-      empty.classList.add('hidden');
-
-      tbody.innerHTML = filtered.map(p => {
-        const bayar = toBool(p.Pembayaran);
-        const menang = String(p['Status Pemenang'] || '').toLowerCase() === 'sudah';
-        const bulan = getBulan(p);
-        return `
-          <tr>
-            <td><strong>${escapeHtml(p['Nomor Arisan'])}</strong></td>
-            <td>${escapeHtml(p['Nama Peserta'])}<br>${menang ? '<small>🏆 Pemenang</small>' : ''}</td>
-            <td>${escapeHtml(p['Jenis Acara'])} ${escapeHtml(p.Tahun)}</td>
-            <td>${escapeHtml(bulan)}</td>
-            <td>${menang ? '<span class="badge-success">🏆 SUDAH MENANG</span>' : '<span class="badge-muted">Aktif</span>'}</td>
-            <td>
-              <label style="display:inline-flex;align-items:center;gap:8px;cursor:pointer">
-                <input type="checkbox" ${bayar ? 'checked' : ''} onchange="toggleBayar('${escapeHtml(p.ID)}', this.checked)" style="transform:scale(1.35);cursor:pointer">
-                <span class="${bayar ? 'badge-success' : 'badge-warning'}">${bayar ? '✅ LUNAS' : '⚠️ BELUM'}</span>
-              </label>
-            </td>
-            <td>
-              <div class="action-group">
-                <button class="btn btn-secondary btn-small" onclick="editPeserta('${escapeHtml(p.ID)}')"><i class="fas fa-pen"></i></button>
-                <button class="btn btn-danger btn-small" onclick="hapusPeserta('${escapeHtml(p.ID)}')"><i class="fas fa-trash"></i></button>
-              </div>
-            </td>
-          </tr>`;
-      }).join('');
-    }
-
-    async function openModalPeserta(p = null) {
-      if (!dataKeluarga.length) {
-        try { await loadKeluarga(); } catch {}
-      }
-
-      document.getElementById('form-peserta').reset();
-      document.getElementById('pes-id').value = '';
-      document.getElementById('modal-peserta-title').textContent = p ? 'Edit Peserta' : 'Tambah Peserta';
-
-      const select = document.getElementById('pes-keluarga');
-      select.innerHTML =
-        '<option value="">-- Pilih Keluarga --</option>' +
-        dataKeluarga.map(k =>
-          `<option value="${escapeHtml(k.ID)}" data-no="${escapeHtml(k['Nomor Arisan'])}" data-nama="${escapeHtml(k['Nama Lengkap'])}">
-            ${escapeHtml(k['Nomor Arisan'])} - ${escapeHtml(k['Nama Lengkap'])}
-          </option>`
-        ).join('');
-
-      if (p) {
-        document.getElementById('pes-id').value = p.ID || '';
-        select.value = p['ID Keluarga'] || p.IDKeluarga || '';
-        document.getElementById('pes-acara').value = p['Jenis Acara'] || 'Idul Fitri';
-        document.getElementById('pes-tahun').value = p.Tahun || new Date().getFullYear();
-        document.getElementById('pes-nominal').value = p.Nominal ?? 100000;
-        autoFillPeserta();
-        document.getElementById('pes-no').value = p['Nomor Arisan'] || document.getElementById('pes-no').value;
-      } else {
-        document.getElementById('pes-tahun').value = getTahunFilter();
-      }
-
-      openModal('modal-peserta');
-    }
-
-    function autoFillPeserta() {
-      const select = document.getElementById('pes-keluarga');
-      const opt = select.options[select.selectedIndex];
-      if (opt?.value) document.getElementById('pes-no').value = opt.getAttribute('data-no') || '';
-    }
-
-    function editPeserta(id) {
-      const p = dataPeserta.find(x => String(x.ID) === String(id));
-      if (!p) return showToast("Data peserta tidak ditemukan.", true);
-      openModalPeserta(p);
-    }
-
-    async function submitPeserta(e) {
-      e.preventDefault();
-      const select = document.getElementById('pes-keluarga');
-      const opt = select.options[select.selectedIndex];
-      if (!opt || !opt.value) {
-        showToast("Pilih keluarga terlebih dahulu.", true);
-        return;
-      }
-
-      const payload = {
-        ID: document.getElementById('pes-id').value,
-        IDKeluarga: select.value,
-        NomorArisan: document.getElementById('pes-no').value,
-        NamaPeserta: opt.getAttribute('data-nama'),
-        JenisAcara: document.getElementById('pes-acara').value,
-        Tahun: document.getElementById('pes-tahun').value,
-        Nominal: Number(document.getElementById('pes-nominal').value || 0)
-      };
-
-      try {
-        await apiCall("savePeserta", payload, "Menyimpan peserta...");
-        closeModal('modal-peserta');
-        showToast("Peserta berhasil disimpan.");
-        await loadPeserta();
-      } catch {}
-    }
-
-    async function toggleBayar(id, status) {
-      try {
-        await apiCall("updatePembayaran", { id, status }, "Memperbarui pembayaran...");
-        const p = dataPeserta.find(x => String(x.ID) === String(id));
-        if (p) p.Pembayaran = status;
-        showToast(status ? "Pembayaran ditandai SUDAH BAYAR." : "Pembayaran ditandai BELUM BAYAR.");
-        renderPeserta();
-      } catch {
-        renderPeserta();
-      }
-    }
-
-    async function hapusPeserta(id) {
-      if (!id) return;
-      if (!confirm("Hapus peserta ini?")) return;
-      try {
-        await apiCall("hapusPeserta", { id }, "Menghapus peserta...");
-        showToast("Peserta berhasil dihapus.");
-        await loadPeserta();
-      } catch {}
-    }
-
-    async function mulaiUndian() {
-      const tahun = document.getElementById('filter-undian-tahun').value;
-      const acara = document.getElementById('filter-undian-acara').value;
-      const btn = document.getElementById('btn-undi');
-      const display = document.getElementById('lottery-display');
-
-      if (intervalUndian) clearInterval(intervalUndian);
-      calonPemenang = null;
-      document.getElementById('hasil-undian').classList.add('hidden');
-
-      let daftarKandidat = [];
-      try {
-        daftarKandidat = await apiCall(
-          "undiArisan",
-          { Tahun: tahun, JenisAcara: acara },
-          "Menyiapkan peserta undian..."
-        );
-      } catch {
-        return;
-      }
-
-      if (!Array.isArray(daftarKandidat) || daftarKandidat.length === 0) {
-        showToast("Tidak ada peserta valid. Pastikan sudah bayar, aktif, dan belum menang pada event ini.", true);
-        return;
-      }
-
-      btn.disabled = true;
-      display.classList.add('spin-anim');
-
-      let elapsed = 0;
-      const totalWaktu = 4500;
-      const tick = 70;
-
-      intervalUndian = setInterval(() => {
-        const item = daftarKandidat[Math.floor(Math.random() * daftarKandidat.length)];
-        display.textContent = item['Nomor Arisan'] ?? '--';
-        elapsed += tick;
-
-        if (elapsed >= totalWaktu) {
-          clearInterval(intervalUndian);
-          intervalUndian = null;
-          display.classList.remove('spin-anim');
-
-          calonPemenang = daftarKandidat[Math.floor(Math.random() * daftarKandidat.length)];
-          display.textContent = calonPemenang['Nomor Arisan'] ?? '--';
-          tampilkanHasil(calonPemenang, acara, tahun);
-          btn.disabled = false;
-        }
-      }, tick);
-    }
-
-    function tampilkanHasil(pemenang, acara, tahun) {
-      document.getElementById('win-nomor').textContent = pemenang['Nomor Arisan'] || '--';
-      document.getElementById('win-nama').textContent = pemenang['Nama Peserta'] || '';
-      document.getElementById('win-detail').textContent = `${acara} ${tahun}`;
-
-      const foto = getPhotoUrl(pemenang);
-      const img = document.getElementById('win-foto');
-      if (foto) {
-        img.src = foto;
-        img.classList.remove('hidden');
-      } else {
-        img.classList.add('hidden');
-        img.removeAttribute('src');
-      }
-
-      document.getElementById('hasil-undian').classList.remove('hidden');
-    }
-
-    function batalkanHasilUndian() {
-      calonPemenang = null;
-      document.getElementById('hasil-undian').classList.add('hidden');
-      document.getElementById('lottery-display').textContent = '--';
-    }
-
-    async function konfirmasiSimpanPemenang() {
-      if (!calonPemenang) {
-        showToast("Belum ada hasil undian.", true);
-        return;
-      }
-
-      const tahun = document.getElementById('filter-undian-tahun').value;
-      const acara = document.getElementById('filter-undian-acara').value;
-
-      if (!confirm(`Simpan ${calonPemenang['Nomor Arisan']} - ${calonPemenang['Nama Peserta']} sebagai pemenang ${acara} ${tahun}?`)) return;
-
-      const payload = {
-        Tahun: tahun,
-        JenisAcara: acara,
-        Tanggal: new Date().toLocaleDateString('id-ID'),
-        NomorArisan: calonPemenang['Nomor Arisan'],
-        Nama: calonPemenang['Nama Peserta'],
-        IDKeluarga: calonPemenang['ID Keluarga'] || calonPemenang.IDKeluarga || '',
-        Foto: getPhotoUrl(calonPemenang)
-      };
-
-      try {
-        await apiCall("simpanPemenang", payload, "Menyimpan pemenang...");
-        showToast("Pemenang berhasil disimpan permanen.");
-        batalkanHasilUndian();
-        await Promise.all([loadPeserta(), loadPemenang()]);
-      } catch {}
-    }
-
-    async function loadPemenang() {
-      try {
-        dataPemenang = await apiCall("getPemenang", {}, "Memuat daftar pemenang...");
-        if (!Array.isArray(dataPemenang)) dataPemenang = [];
-        dataPemenang = [...dataPemenang].reverse();
-        renderPemenang();
-        renderRecentWinners();
-        return dataPemenang;
-      } catch {
-        dataPemenang = [];
-        renderPemenang();
-        renderRecentWinners();
-        return [];
-      }
-    }
-
-    function renderPemenang() {
-      const tahun = document.getElementById('filter-pemenang-tahun')?.value || '';
-      const acara = document.getElementById('filter-pemenang-acara')?.value || '';
-      const container = document.getElementById('winner-container');
-      const empty = document.getElementById('empty-pemenang');
-
-      const filtered = dataPemenang.filter(p => {
-        return (!tahun || String(p?.Tahun) === String(tahun)) &&
-               (!acara || String(p?.['Jenis Acara']) === String(acara));
-      });
-
-      if (!filtered.length) {
-        container.innerHTML = '';
-        empty.classList.remove('hidden');
-        return;
-      }
-      empty.classList.add('hidden');
-
-      container.innerHTML = filtered.map(p => {
-        const foto = getPhotoUrl(p);
-        return `
-          <div class="winner-card">
-            ${foto ? `<img class="winner-photo" src="${escapeHtml(foto)}" alt="Foto pemenang" loading="lazy">` : '<div style="font-size:3rem">🏆</div>'}
-            <p>🏆 Pemenang Arisan</p>
-            <h1>${escapeHtml(p?.['Nomor Arisan'])}</h1>
-            <h2>${escapeHtml(p?.['Nama Pemenang'])}</h2>
-            <p><strong>${escapeHtml(p?.['Jenis Acara'])} ${escapeHtml(p?.Tahun)}</strong></p>
-            <small>${escapeHtml(p?.['Waktu Pengundian'] || p?.Tanggal || '')}</small>
-          </div>`;
-      }).join('');
-    }
-
-    function renderRecentWinners() {
-      const container = document.getElementById('recent-winner-container');
-      const tahun = document.getElementById('filter-undian-tahun')?.value || '';
-      const acara = document.getElementById('filter-undian-acara')?.value || '';
-
-      const filtered = dataPemenang
-        .filter(p => String(p?.Tahun) === String(tahun) && String(p?.['Jenis Acara']) === String(acara))
-        .slice(0, 6);
-
-      if (!filtered.length) {
-        container.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Belum ada pemenang untuk event ini.</div>';
-        return;
-      }
-
-      container.innerHTML = filtered.map(p => {
-        const foto = getPhotoUrl(p);
-        return `
-          <div class="winner-card">
-            ${foto ? `<img class="winner-photo" src="${escapeHtml(foto)}" alt="Foto pemenang" loading="lazy">` : '<div style="font-size:2.7rem">🏆</div>'}
-            <h1>${escapeHtml(p?.['Nomor Arisan'])}</h1>
-            <h3>${escapeHtml(p?.['Nama Pemenang'])}</h3>
-            <p>${escapeHtml(p?.['Jenis Acara'])} ${escapeHtml(p?.Tahun)}</p>
-          </div>`;
-      }).join('');
-    }
-
-    document.getElementById('filter-undian-tahun').addEventListener('change', renderRecentWinners);
-    document.getElementById('filter-undian-acara').addEventListener('change', renderRecentWinners);
-
-    function initApp() {
-      initYearOptions();
-
-      if (!isApiConfigured()) {
-        document.getElementById('api-warning').classList.remove('hidden');
-      }
-
-      showPage('dashboard');
-    }
-
-    window.addEventListener('load', initApp);
-  </script>
+  },tick)
+}
+function batalUndian(){calonPemenang=null;document.getElementById("result").classList.add("hidden");document.getElementById("ball").textContent="--"}
+async function simpanPemenang(){
+  if(!calonPemenang)return;
+  const tahun=document.getElementById("undian-tahun").value,acara=document.getElementById("undian-acara").value;
+  if(!confirm(`Simpan ${calonPemenang["Nomor Arisan"]} - ${calonPemenang["Nama Peserta"]} sebagai pemenang ${acara} ${tahun}?`))return;
+  try{
+    await api("simpanPemenang",{Tahun:tahun,JenisAcara:acara,IDKeluarga:calonPemenang["ID Keluarga"]},"Menyimpan pemenang...");
+    toast("Pemenang berhasil disimpan.");batalUndian();await Promise.all([loadPeserta(),loadPemenang(),loadDashboard()])
+  }catch(e){toast(e.message,true)}
+}
+
+async function loadPemenang(){
+  try{dataPemenang=await api("getPemenang",{},"Memuat pemenang...");if(!Array.isArray(dataPemenang))dataPemenang=[];dataPemenang=[...dataPemenang].reverse();renderPemenang();renderRecentWinners()}
+  catch(e){dataPemenang=[];renderPemenang();renderRecentWinners()}
+}
+function renderPemenang(){
+  const y=document.getElementById("winner-tahun").value,a=document.getElementById("winner-acara").value;
+  const rows=dataPemenang.filter(p=>(!y||String(p.Tahun)===String(y))&&(!a||String(p?.["Jenis Acara"])===a));
+  document.getElementById("empty-winner").classList.toggle("hidden",rows.length>0);
+  document.getElementById("winner-grid").innerHTML=rows.map(p=>{
+    const f=photo(p);return `<div class="w-card">${f?`<img class="win-foto" src="${esc(f)}" alt="Foto" loading="lazy">`:"<div style='font-size:3rem'>🏆</div>"}<p>🏆 Pemenang Arisan</p><h1>${esc(p?.["Nomor Arisan"])}</h1><h3>${esc(p?.["Nama Pemenang"])}</h3><p><strong>${esc(p?.["Jenis Acara"])} ${esc(p?.Tahun)}</strong></p><small>${esc(p?.["Waktu Pengundian"])}</small></div>`
+  }).join("")
+}
+function renderRecentWinners(){
+  const y=document.getElementById("undian-tahun").value,a=document.getElementById("undian-acara").value;
+  const rows=dataPemenang.filter(p=>String(p?.Tahun)===String(y)&&String(p?.["Jenis Acara"])===a).slice(0,6);
+  const box=document.getElementById("recent-winners");
+  if(!rows.length){box.innerHTML='<div class="empty" style="grid-column:1/-1">Belum ada pemenang untuk event ini.</div>';return}
+  box.innerHTML=rows.map(p=>{const f=photo(p);return `<div class="w-card">${f?`<img class="win-foto" src="${esc(f)}" alt="Foto" loading="lazy">`:"<div style='font-size:2.7rem'>🏆</div>"}<h1>${esc(p?.["Nomor Arisan"])}</h1><h3>${esc(p?.["Nama Pemenang"])}</h3><p>${esc(p?.["Jenis Acara"])} ${esc(p?.Tahun)}</p></div>`}).join("")
+}
+
+document.getElementById("filter-tahun").addEventListener("change",renderPeserta);
+document.getElementById("filter-acara").addEventListener("change",renderPeserta);
+document.getElementById("winner-tahun").addEventListener("change",renderPemenang);
+document.getElementById("winner-acara").addEventListener("change",renderPemenang);
+document.getElementById("undian-tahun").addEventListener("change",()=>{loadPemenang()});
+document.getElementById("undian-acara").addEventListener("change",()=>{loadPemenang()});
+
+window.addEventListener("load",()=>{
+  setYears();
+  const hash=location.hash.replace("#","");showPage(["dashboard","keluarga","peserta","undian","pemenang"].includes(hash)?hash:"dashboard");
+});
+</script>
 </body>
 </html>
